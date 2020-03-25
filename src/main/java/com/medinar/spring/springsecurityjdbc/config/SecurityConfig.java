@@ -25,7 +25,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         // Set configuration on the auth object.
         auth.jdbcAuthentication()
-                .dataSource(dataSource);
+                .dataSource(dataSource)
+                // These two methods are used to override the default schema.
+                .usersByUsernameQuery("select username, password, enabled "
+                        + "from users "
+                        + "where username = ?")
+                .authoritiesByUsernameQuery("select username, auhtority "
+                        + "from authorities "
+                        + "where username = ?");
     }
 
     @Bean
